@@ -234,6 +234,8 @@
 </div> 
 </template>
 <script>
+import { labelList } from '../api/joblabel'
+import{ jobSelect,jobList,jobTuijian} from '../api/job'
 import axios from 'axios'
 export default {
     data(){
@@ -299,7 +301,7 @@ export default {
                 this.$router.push({path:"/tuijiantable",query:{id:val.jobId,label:val.joblabel[0]}})
         },
         getJoblabelList(){
-            axios.get("api/joblabel/list").then(res=>{
+            labelList().then(res=>{
                 if(res.status==200){
                     this.options=res.data.data;
                 }
@@ -310,9 +312,7 @@ export default {
         },
         info(){
             let params=this.model
-            axios.get("api/job/select",{
-                params
-            }).then(res=>{
+            jobSelect(params).then(res=>{
                 if(res.status==200){
                     this.tableData=res.data.data;
                     for(var i=0;i<res.data.data.length;i++){
@@ -327,11 +327,10 @@ export default {
         selectOne(ID){
             this.biaoji=ID;
             this.state=true;
-            axios.get("api/job/list",{
-                params:{
+            let params={
                     id:ID
                 }
-            }).then(res=>{
+            jobList(params).then(res=>{
                 if(res.status==200){
                     this.tableDataa=res.data.data[0]
                     this.splitTemp=res.data.data[0].joblabel.split(",");
@@ -345,9 +344,7 @@ export default {
                         id:this.tableDataa.jobId,
                         label:this.tableDataa.joblabel[0]
                     }
-                    axios.get("api/job/tuijian",{
-                        params
-                    }).then(res=>{
+                    jobTuijian(params).then(res=>{
                         if(res.status==200){
                             this.tuijianData=res.data.data
                         }
@@ -359,9 +356,7 @@ export default {
                         id:this.tableDataa.jobId,
                         label:this.tableDataa.joblabel[1]
                         }
-                        axios.get("api/job/tuijian",{
-                            params
-                        }).then(res=>{
+                        jobTuijian(params).then(res=>{
                             if(res.status==200){
                                 let temp =this.tuijianData.concat(res.data.data)
                                 this.tuijianData=temp
