@@ -107,7 +107,7 @@ export default {
  }
   
  .fillWidth {
- width: 100%;
+
  }
 .ms-title {
     width: 100%;
